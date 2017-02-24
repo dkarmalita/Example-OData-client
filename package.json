@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run test:watch",
     "start-x": "nodemon node_modules/.bin/babel-node ./",
-    "start": "mocha --watch --opts .mocharc --recursive ./tests/**/*.intg.js",
-    "test": "mocha --opts .mocharc --recursive ./tests/**/*.spec.js"
+    "test": "mocha --opts .mocharc --recursive ./tests/**/*.intg.js",
+    "test:watch": "mocha --watch --opts .mocharc --recursive ./tests/**/*.intg.js"
   },
   "keywords": [],
   "author": "Dmitriy Karmalita <altmine@gmail.com>",
@@ -19,15 +20,11 @@
     "babel-preset-latest": "6.22.0",
     "chai": "3.5.0",
     "colors": "1.1.2",
-    "isomorphic-fetch": "2.2.1",
     "mocha": "3.2.0",
     "nodemon": "1.11.0"
   },
   "dependencies": {
     "axios": "0.15.3",
-    "babel-polyfill": "6.23.0",
-    "odata": "0.3.0",
-    "q": "1.4.1",
-    "query-string": "4.3.2"
+    "isomorphic-fetch": "2.2.1"
   }
 }
