@@ -7,7 +7,10 @@ const o = new OdataClient({
   headers: {'Content-Type': 'application/json'}
 })
 
-describe('odata.org/V4', ()=>{
+describe('odata.org/V4', function() {
+
+    this.slow(3000);
+
     const newPerson = {
         "UserName": '01-hoj'+Date.now(),
         "FirstName": "Miala",
