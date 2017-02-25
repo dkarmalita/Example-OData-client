@@ -1,5 +1,11 @@
 import {expect} from 'chai';
-import o from '../odata';
+import OdataClient from '../odata';
+
+const o = new OdataClient({
+  baseURL: 'http://services.odata.org/V4/TripPinService',
+  timeout: 2000,
+  headers: {'Content-Type': 'application/json'}
+})
 
 describe('odata.org/V4', ()=>{
     const newPerson = {
@@ -26,8 +32,8 @@ describe('odata.org/V4', ()=>{
             )
         });
     })
-    it("getRoot(setName)", async ()=>{
-        return o.getRoot('/Photos')
+    it("listSet(setName)", async ()=>{
+        return o.listSet('/Photos')
         .then( (x) => {
             expect(x.data.value.length).to.be.above(0)
         });
@@ -44,10 +50,9 @@ describe('odata.org/V4', ()=>{
             expect(x.data['UserName']).to.eql('clydeguess')
         });
     })
-    it("getList(setName, field, value)", async ()=>{
-        return o.getList('/People','FirstName', 'Clyde')
+    it("filterSet(setName, field, value)", async ()=>{
+        return o.filterSet('/People','FirstName', 'Clyde')
         .then( (x) => {
-            //console.log(x.data.value.length)
             expect(x.data.value.length).to.eql(1)
         });
     })
@@ -75,7 +80,7 @@ describe('odata.org/V4', ()=>{
     it("deleteItem(setName, id)", async ()=>{
         return o.deleteItem('/People', newPerson['UserName'])
         .then( (x) => {
-            return o.getList('/People', 'UserName', newPerson['UserName'])
+            return o.filterSet('/People', 'UserName', newPerson['UserName'])
         })
         .then( (x) => {
             //console.log(x.data.value.length);
