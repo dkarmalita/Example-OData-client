@@ -10,13 +10,7 @@ const o = new OdataClient({
 describe('odata.org/V4', function() {
 
     this.slow(3000);
-
-    const newPerson = {
-        "UserName": '01-hoj'+Date.now(),
-        "FirstName": "Miala",
-        "LastName": "Thompson",
-        "Gender": "Female"
-    }
+    this.timeout(4000);
 
     it("getRoot()", async ()=>{
         return o.getRoot()
@@ -35,59 +29,73 @@ describe('odata.org/V4', function() {
             )
         });
     })
-    it("listSet(setName)", async ()=>{
-        return o.listSet('/Photos')
-        .then( (x) => {
-            expect(x.data.value.length).to.be.above(0)
-        });
-    })
-    it("getItem(setName, numId)", async ()=>{
-        return o.getItem('/Photos', 21)
-        .then( (x) => {
-            expect(x.data['Id']).to.eql(21)
-        });
-    })
-    it("getItem(setName, strId)", async ()=>{
-        return o.getItem('/People', 'clydeguess')
-        .then( (x) => {
-            expect(x.data['UserName']).to.eql('clydeguess')
-        });
-    })
-    it("filterSet(setName, field, value)", async ()=>{
-        return o.filterSet('/People','FirstName', 'Clyde')
-        .then( (x) => {
-            expect(x.data.value.length).to.eql(1)
-        });
-    })
-    it("addItem(setName, {...})", async ()=>{
-        return o.addItem('/People', newPerson)
-        .then( (x) => {
-            return o.getItem('/People', newPerson['UserName'])
-        })
-        .then( (x) => {
-            expect(x.data['LastName']).to.eql('Thompson');
-        })
-    })
-    it("updateItem(setName, {...})", async ()=>{
-        const updatePerson = {
-            "LastName": "Anderson"
+
+    describe('item CRUD', () => {
+
+        const newPerson = {
+            "UserName": '01-hoj'+Date.now(),
+            "FirstName": "Miala",
+            "LastName": "Thompson",
+            "Gender": "Female"
         }
-        return o.updateItem('/People', newPerson['UserName'], updatePerson)
-        .then( (x) => {
-            return o.getItem('/People', newPerson['UserName'])
+
+        it("create(setName, {...})", async ()=>{
+            return o.item.create('/People', newPerson)
+            .then( (x) => {
+                return o.item.read('/People', newPerson['UserName'])
+            })
+            .then( (x) => {
+                expect(x.data['LastName']).to.eql('Thompson');
+            })
         })
-        .then( (x) => {
-            expect(x.data['LastName']).to.eql(updatePerson['LastName']);
+        it("read(setName, numId)", async ()=>{
+            return o.item.read('/Photos', 21)
+            .then( (x) => {
+                expect(x.data['Id']).to.eql(21)
+            });
+        })
+        it("read(setName, strId)", async ()=>{
+            return o.item.read('/People', 'clydeguess')
+            .then( (x) => {
+                expect(x.data['UserName']).to.eql('clydeguess')
+            });
+        })
+        it("update(setName, id, {...})", async ()=>{
+            const updatePerson = {
+                "LastName": "Anderson"
+            }
+            return o.item.update('/People', newPerson['UserName'], updatePerson)
+            .then( (x) => {
+                return o.item.read('/People', newPerson['UserName'])
+            })
+            .then( (x) => {
+                expect(x.data['LastName']).to.eql(updatePerson['LastName']);
+            })
+        })
+        it("delete(setName, id)", async ()=>{
+            return o.item.delete('/People', newPerson['UserName'])
+            .then( (x) => {
+                return o.asset.filter('/People', 'UserName', newPerson['UserName'])
+            })
+            .then( (x) => {
+                //console.log(x.data.value.length);
+                expect(x.data.value.length).to.eql(0);
+            })
         })
     })
-    it("deleteItem(setName, id)", async ()=>{
-        return o.deleteItem('/People', newPerson['UserName'])
-        .then( (x) => {
-            return o.filterSet('/People', 'UserName', newPerson['UserName'])
+
+    describe('asset', ()=>{
+        it("list(setName)", async ()=>{
+            return o.asset.list('/Photos')
+            .then( (x) => {
+                expect(x.data.value.length).to.be.above(0)
+            });
         })
-        .then( (x) => {
-            //console.log(x.data.value.length);
-            expect(x.data.value.length).to.eql(0);
+        it("filter(setName, field, value)", async ()=>{
+            return o.asset.filter('/People','FirstName', 'Clyde')
+            .then( (x) => {
+                expect(x.data.value.length).to.eql(1)
+            });
         })
     })
 })
