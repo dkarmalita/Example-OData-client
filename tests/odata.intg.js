@@ -85,16 +85,16 @@ describe('odata.org/V4', function() {
     })
 
     describe('asset', ()=>{
-        it("list(setName)", async ()=>{
-            return o.asset.list('/Photos')
-            .then( (x) => {
-                expect(x.data.value.length).to.be.above(0)
-            });
-        })
         it("filter(setName, field, value)", async ()=>{
             return o.asset.filter('/People','FirstName', 'Clyde')
             .then( (x) => {
                 expect(x.data.value.length).to.eql(1)
+            });
+        })
+        it("list(setName)", async ()=>{
+            return o.asset.list('/Photos')
+            .then( (x) => {
+                expect(x.data.value.length).to.be.above(0)
             });
         })
     })

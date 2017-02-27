@@ -1,0 +1,65 @@
+WARNINGS:
+  ☐ filter of str/num/other - TYPAES ARE NOT COMPATIBLE
+Specifications:
+ ✔ Item CRUD @done (17-02-26 12:25)
+ ☐ $count
+ ☐ $filter
+   ☐ Comparison Operators
+     ✔ eq @done (17-02-26 12:25)
+     ☐ ne
+     ☐ lt
+     ☐ le
+     ☐ gt
+     ☐ ge
+     ☐ has
+   ☐ Logical Operators
+     ☐ and
+     ☐ or
+     ☐ not
+   ☐ String Functions
+     ☐ indexof
+     ☐ contains
+     ☐ endswith
+     ☐ startswith
+     ☐ length
+     ☐ substring
+     ☐ tolower
+     ☐ toupper
+     ☐ trim
+     ☐ concat
+   ☐ Arithmetic Operators
+     ☐ add
+     ☐ sub
+     ☐ mul
+     ☐ div
+     ☐ mod
+   ☐ Date Functions
+     ☐ year
+     ☐ month
+     ☐ day
+     ☐ hour
+     ☐ minute
+     ☐ second
+     ☐ fractionalseconds
+     ☐ date
+     ☐ time
+     ☐ totaloffsetminutes
+     ☐ now
+     ☐ mindatetime
+     ☐ maxdatetime
+   ☐ Math Functions
+     ☐ round
+     ☐ floor
+     ☐ ceiling
+ ☐ $select
+ ☐ $top
+ ☐ $skip
+ ☐ $orderby
+ ☐ $expand
+
+ refs:
+  * [Understand OData in 6 steps](http://www.odata.org/getting-started/understand-odata-in-6-steps/)
+  * http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/part2-url-conventions/odata-v4.0-errata03-os-part2-url-conventions-complete.html
+  * [node-odata](https://github.com/TossShinHwa/node-odata)
+  * [Libraries](http://www.odata.org/libraries/)
+  * [CRUD](https://ru.wikipedia.org/wiki/CRUD)

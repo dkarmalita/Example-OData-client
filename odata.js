@@ -53,8 +53,8 @@ export default class OdataClient {
         delete: async (setName, id, tag = '*') => await this.axios.delete(setName+findID(id), eTagHeader(tag))
     };
     asset = {
-        list: async (setName) => await this.axios.get(setName),
         filter: async (setName, field, value, operand='eq') => await this.axios.get(setName+filter(field, operand, value)),
+        list: async (setName) => await this.axios.get(setName),
     };
     getRoot = async (setName) => await this.asset.list('/');
 }
