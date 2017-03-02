@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run test:watch",
+    "start": "npm i && npm run test:watch",
     "start-x": "nodemon node_modules/.bin/babel-node ./",
     "test": "mocha --opts .mocharc --recursive ./tests/**/*.intg.js",
     "test:watch": "mocha --watch --opts .mocharc --recursive ./tests/**/*.intg.js"

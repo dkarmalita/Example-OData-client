@@ -1,9 +1,9 @@
 import {expect} from 'chai';
-import OdataClient from '../odata';
+import OService from '../odata';
 
-const o = new OdataClient({
+const o = new OService({
   baseURL: 'http://services.odata.org/V4/TripPinService',
-  timeout: 2000,
+  timeout: 4000,
   headers: {'Content-Type': 'application/json'}
 })
 
@@ -30,8 +30,16 @@ describe('odata.org/V4', function() {
         });
     })
 
-    describe('item CRUD', () => {
+    it("getMetadata()", async ()=>{
+        return o.getMetadata()
+        .then( (x) => {
+            expect(x).to.have.property('data');
+            // can be parsed by a browser:
+            // http://stackoverflow.com/a/17604312
+        });
+    })
 
+    describe('items CRUD', () => {
         const newPerson = {
             "UserName": '01-hoj'+Date.now(),
             "FirstName": "Miala",
@@ -40,23 +48,27 @@ describe('odata.org/V4', function() {
         }
 
         it("create(setName, {...})", async ()=>{
-            return o.item.create('/People', newPerson)
+            return o.items('/People').create(newPerson)
             .then( (x) => {
-                return o.item.read('/People', newPerson['UserName'])
+                expect(x.status).to.eql(201)
+                return o.items('/People').read(newPerson['UserName'])
             })
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data['LastName']).to.eql('Thompson');
             })
         })
         it("read(setName, numId)", async ()=>{
-            return o.item.read('/Photos', 21)
+            return o.items('/Photos').read(21)
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data['Id']).to.eql(21)
             });
         })
         it("read(setName, strId)", async ()=>{
-            return o.item.read('/People', 'clydeguess')
+            return o.items('/People').read('clydeguess')
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data['UserName']).to.eql('clydeguess')
             });
         })
@@ -64,21 +76,24 @@ describe('odata.org/V4', function() {
             const updatePerson = {
                 "LastName": "Anderson"
             }
-            return o.item.update('/People', newPerson['UserName'], updatePerson)
+            return o.items('/People').update(newPerson['UserName'], updatePerson)
             .then( (x) => {
-                return o.item.read('/People', newPerson['UserName'])
+                expect(x.status).to.eql(204)
+                return o.items('/People').read(newPerson['UserName'])
             })
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data['LastName']).to.eql(updatePerson['LastName']);
             })
         })
         it("delete(setName, id)", async ()=>{
-            return o.item.delete('/People', newPerson['UserName'])
+            return o.items('/People').delete(newPerson['UserName'])
             .then( (x) => {
-                return o.asset.filter('/People', 'UserName', newPerson['UserName'])
+                expect(x.status).to.eql(204)
+                return o.asset('/People').filter('UserName', newPerson['UserName'])
             })
             .then( (x) => {
-                //console.log(x.data.value.length);
+                expect(x.status).to.eql(200)
                 expect(x.data.value.length).to.eql(0);
             })
         })
@@ -86,16 +101,19 @@ describe('odata.org/V4', function() {
 
     describe('asset', ()=>{
         it("filter(setName, field, value)", async ()=>{
-            return o.asset.filter('/People','FirstName', 'Clyde')
+            return o.asset('/People').filter('FirstName', 'Clyde')
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data.value.length).to.eql(1)
             });
         })
         it("list(setName)", async ()=>{
-            return o.asset.list('/Photos')
+            return o.asset('/Photos').list()
             .then( (x) => {
+                expect(x.status).to.eql(200)
                 expect(x.data.value.length).to.be.above(0)
             });
         })
     })
+
 })
